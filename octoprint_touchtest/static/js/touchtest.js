@@ -27,9 +27,11 @@ $(function() {
       code += " X" + xPos;
       code += " Y" + yPos;
       code += " F" + self.feedrate();
-      OctoPrint.control.sendGcode("G0 Z5 F"+self.feedrate());
-      OctoPrint.control.sendGcode(code);
-      OctoPrint.control.sendGcode("G0 Z0 F"+self.feedrate());
+      OctoPrint.control.sendGcode("G0 Z5 F"+self.feedrate()).then(function() {
+          return OctoPrint.control.sendGcode(code);
+      }).then(function() {
+          return OctoPrint.control.sendGcode("G0 Z0 F"+self.feedrate());
+      });
       console.log("TouchTest: Sending command \"" + code +"\"");
     }
 
